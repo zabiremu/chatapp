@@ -71,17 +71,29 @@ jobs:
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
         # key: ${{ secrets.KEY }}  # Use this instead of password for SSH key authentication
-        port: ${{ secrets.PORT }}
+        port: ${{ secrets.PORT || 22 }}
+        timeout: 60s
+        command_timeout: 10m
         script: |
-          cd /path/to/your/laravel/app
+          # Navigate to your Laravel application directory
+          cd /var/www/html/your-app-name
+          
+          # Pull latest changes
           git pull origin main
+          
+          # Install/update composer dependencies
           composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev
+          
+          # Set proper permissions for Apache
+          sudo chown -R www-data:www-data storage bootstrap/cache
+          sudo chmod -R 775 storage bootstrap/cache
+          
+          # Run Laravel artisan commands
           php artisan migrate --force
           php artisan config:cache
           php artisan route:cache
           php artisan view:cache
           php artisan queue:restart
+          
+          # Restart Apache
           sudo systemctl reload apache2
-          # Alternative commands:
-          # sudo service apache2 reload
-          # sudo apache2ctl graceful
