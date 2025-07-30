@@ -28,7 +28,9 @@ jobs:
 
     - name: Build assets
       run: |
-        npm run prod
+        npm run build  # Changed from 'prod' to 'build' which is standard in Laravel
+        # OR if using Laravel Mix:
+        # npm run production
 
     - name: Generate key
       run: php artisan key:generate
@@ -39,12 +41,12 @@ jobs:
     - name: FTP Deploy
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
-        server: ${{ secrets.FTP_SERVER }}  # ftp.zabiremu.fun
-        username: ${{ secrets.FTP_USERNAME }}  # chatapp@chat-app.zabiremu.fun
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
         local-dir: ./
-        server-dir: /  # Adjust if your files need to go to a subdirectory
+        server-dir: /
         exclude: |
           .git*
           .github/
@@ -57,4 +59,3 @@ jobs:
           storage/framework/sessions/*
           storage/framework/views/*
           storage/logs/*
-        dangerous-clean-slate: false
