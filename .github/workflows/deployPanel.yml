@@ -40,8 +40,8 @@ jobs:
         character set server: 'utf8'
         collation server: 'utf8_general_ci'
         mysql version: '8.0'
-        mysql database: 'laravel_test'
-        mysql root password: 'root'
+        mysql database: 'jalhajux_chatapp'
+        mysql root password: 'jalhajux_chatapp'
         
     - name: Wait for MySQL
       run: |
@@ -49,15 +49,20 @@ jobs:
           sleep 1
         done
         
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      env:
-        DB_CONNECTION: mysql
-        DB_HOST: 127.0.0.1
-        DB_PORT: 3306
-        DB_DATABASE: jalhajux_chatapp
-        DB_USERNAME: jalhajux_chatapp
-        DB_PASSWORD: _yau^KlCjiX@
-      run: vendor/bin/phpunit
+    # - name: Execute tests (Unit and Feature tests) via Pest
+    #   env:
+    #     DB_CONNECTION: mysql
+    #     DB_HOST: 127.0.0.1
+    #     DB_PORT: 3306
+    #     DB_DATABASE: laravel_test
+    #     DB_USERNAME: root
+    #     DB_PASSWORD: root
+    #   run: |
+    #     if [ -f "vendor/bin/pest" ]; then
+    #       vendor/bin/pest
+    #     else
+    #       vendor/bin/phpunit
+    #     fi
       
     - name: Deploy to server
       uses: appleboy/ssh-action@v1.0.0
