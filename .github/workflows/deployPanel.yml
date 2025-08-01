@@ -21,19 +21,8 @@ jobs:
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
-    - name: Install Dependencies
-      run: |
-        composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-        npm install
+    # Removed composer install and npm install/build
 
-    - name: Build assets
-      run: |
-        npm run build  # Changed from 'prod' to 'build' which is standard in Laravel
-        # OR if using Laravel Mix:
-        # npm run production
-
-    - name: Generate key
-      run: php artisan key:generate
 
     - name: Set permissions
       run: chmod -R 755 storage bootstrap/cache
@@ -45,7 +34,7 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         port: 21
-        local-dir: ./
+        local-dir: ./        # Adjust if you only want to deploy `public/` or a `build/` directory
         server-dir: /
         exclude: |
           .git*
